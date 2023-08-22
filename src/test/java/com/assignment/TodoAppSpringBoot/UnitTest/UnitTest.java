@@ -31,14 +31,6 @@ class TaskControllerUnitTest {
 
     @InjectMocks
     TaskController taskController;
-    @Getter
-    MockMvc mockMvc;
-    @Mock
-    ModelMapper modelMapper;
-    ObjectMapper mapper;
-
-    @Mock
-    TaskRepository taskRepository;
 
     @Mock
     TaskServiceImpl taskService;
@@ -46,10 +38,9 @@ class TaskControllerUnitTest {
     Task TASK1 = new Task( 2L,"Testing task one", true);
     Task TASK2 = new Task(3L,"Testing task two", false);
     Task TASK3 = new Task(4L, "Complete To Do App is Done Now", true);
-
+    List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
     @Test
     void getAllTasks() throws Exception {
-        List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
 
         when(taskService.getAllTask()).thenReturn(tasks);
 
@@ -62,7 +53,6 @@ class TaskControllerUnitTest {
 
     @Test
     void getTaskById() {
-        //List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
 
         when(taskService.findTaskById(4L)).thenReturn(Optional.ofNullable(TASK3));
 
@@ -72,7 +62,6 @@ class TaskControllerUnitTest {
 
     }
     private List<Task> filterTasks(String str) {
-        List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
         List<Task> comlist = new ArrayList<>();
         List<Task> incomlist = new ArrayList<>();
 
@@ -97,7 +86,6 @@ class TaskControllerUnitTest {
 
     @Test
     void getAllCompletedTasks() {
-        List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
 
         when(taskService.findAllCompletedTask()).thenReturn(filterTasks("Completed"));
 
@@ -108,7 +96,6 @@ class TaskControllerUnitTest {
 
     @Test
     void getAllIncompleteTasks() {
-        List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
 
         when(taskService.findAllInCompleteTask()).thenReturn(filterTasks("InCompleted"));
 
@@ -119,8 +106,6 @@ class TaskControllerUnitTest {
 
     @Test
     void createTask() {
-
-        List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
 
         when(taskService.createNewTask(TASK1)).thenReturn(TASK1);
 
@@ -134,9 +119,6 @@ class TaskControllerUnitTest {
     @Test
     void updateTask() {
 
-
-        List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
-
         when(taskService.updateTask(TASK2)).thenReturn(TASK2);
 
         ResponseEntity<Task> result = taskController.updateTask(2L, TASK2);
@@ -146,12 +128,10 @@ class TaskControllerUnitTest {
 
     @Test
     void testDeleteTask() {
-        List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
 
         when(taskService.deleteTask(2L)).thenReturn("Delete Successful");
 
         ResponseEntity<String> result = taskController.deleteTask(2L);
-        //assertThat(result.getBody().size()).isEqualTo(3);
         assertThat(result.getBody()).isEqualTo("Delete Successful");
         assertThat(result.getStatusCode().value()).isEqualTo(200);
     }
