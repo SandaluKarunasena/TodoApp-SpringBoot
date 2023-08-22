@@ -49,6 +49,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public Task updateTask(Task task) {
-        return modelMapper.map(taskRepository.save(modelMapper.map(task, Task.class)), Task.class);
+        return taskRepository.save(task);
     }
 }
