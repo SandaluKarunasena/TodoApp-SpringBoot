@@ -9,11 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
@@ -91,7 +86,7 @@ public class TaskControllerIntegrationTest {
 
     @Test
     public void testDeleteTask() {
-        Long existingTaskId = 45L;
+        Long existingTaskId = 40L; //Existing Id to pass the test
 
         // Perform the HTTP DELETE request
         given()
