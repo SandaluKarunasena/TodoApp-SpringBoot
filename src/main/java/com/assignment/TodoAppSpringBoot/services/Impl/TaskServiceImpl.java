@@ -1,5 +1,6 @@
 package com.assignment.TodoAppSpringBoot.services.Impl;
 
+import com.assignment.TodoAppSpringBoot.dto.TaskDTO;
 import com.assignment.TodoAppSpringBoot.models.Task;
 import com.assignment.TodoAppSpringBoot.repositories.TaskRepository;
 import com.assignment.TodoAppSpringBoot.services.TaskService;
@@ -19,8 +20,8 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public Task createNewTask(Task task) {
-        return modelMapper.map(taskRepository.save(modelMapper.map(task, Task.class)), Task.class);
+    public TaskDTO createNewTask(TaskDTO taskDTO) {
+        return modelMapper.map(taskRepository.save(modelMapper.map(taskDTO, Task.class)), TaskDTO.class);
     }
 
     public List<Task> getAllTask() {
@@ -48,7 +49,7 @@ public class TaskServiceImpl implements TaskService {
         return "Delete Successful";
     }
 
-    public Task updateTask(Task task) {
-        return taskRepository.save(task);
+    public TaskDTO updateTask(TaskDTO task) {
+        return modelMapper.map(taskRepository.save(modelMapper.map(task, Task.class)), TaskDTO.class);
     }
 }
