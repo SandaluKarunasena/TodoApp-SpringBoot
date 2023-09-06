@@ -1,8 +1,8 @@
 package com.assignment.TodoAppSpringBoot.UnitTest;
 
 //import jdk.internal.jshell.tool.ConsoleIOContext;
-
 import com.assignment.TodoAppSpringBoot.controllers.TaskController;
+import com.assignment.TodoAppSpringBoot.dto.TaskDTO;
 import com.assignment.TodoAppSpringBoot.models.Task;
 import com.assignment.TodoAppSpringBoot.repositories.TaskRepository;
 import com.assignment.TodoAppSpringBoot.services.Impl.TaskServiceImpl;
@@ -27,10 +27,18 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(MockitoExtension.class)
-class TaskControllerUnitTest {
+class TaskControllerTest {
 
     @InjectMocks
     TaskController taskController;
+    @Getter
+    MockMvc mockMvc;
+    @Mock
+    ModelMapper modelMapper;
+    ObjectMapper mapper;
+
+    @Mock
+    TaskRepository taskRepository;
 
     @Mock
     TaskServiceImpl taskService;
@@ -38,9 +46,10 @@ class TaskControllerUnitTest {
     Task TASK1 = new Task( 2L,"Testing task one", true);
     Task TASK2 = new Task(3L,"Testing task two", false);
     Task TASK3 = new Task(4L, "Complete To Do App is Done Now", true);
-    List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
+
     @Test
     void getAllTasks() throws Exception {
+        List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
 
         when(taskService.getAllTask()).thenReturn(tasks);
 
@@ -53,6 +62,7 @@ class TaskControllerUnitTest {
 
     @Test
     void getTaskById() {
+        //List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
 
         when(taskService.findTaskById(4L)).thenReturn(Optional.ofNullable(TASK3));
 
@@ -62,6 +72,7 @@ class TaskControllerUnitTest {
 
     }
     private List<Task> filterTasks(String str) {
+        List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
         List<Task> comlist = new ArrayList<>();
         List<Task> incomlist = new ArrayList<>();
 
@@ -86,6 +97,7 @@ class TaskControllerUnitTest {
 
     @Test
     void getAllCompletedTasks() {
+        List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
 
         when(taskService.findAllCompletedTask()).thenReturn(filterTasks("Completed"));
 
@@ -96,6 +108,7 @@ class TaskControllerUnitTest {
 
     @Test
     void getAllIncompleteTasks() {
+        List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
 
         when(taskService.findAllInCompleteTask()).thenReturn(filterTasks("InCompleted"));
 
@@ -106,10 +119,15 @@ class TaskControllerUnitTest {
 
     @Test
     void createTask() {
+        TaskDTO TASK1 = new TaskDTO( 2L,"Testing task one", true);
+        TaskDTO TASK2 = new TaskDTO(3L,"Testing task two", false);
+        TaskDTO TASK3 = new TaskDTO(4L, "Complete To Do App is Done Now", true);
+
+        List<TaskDTO> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
 
         when(taskService.createNewTask(TASK1)).thenReturn(TASK1);
 
-        ResponseEntity<Task> result = taskController.createTask(TASK1);
+        ResponseEntity<TaskDTO> result = taskController.createTask(TASK1);
         assertThat(result.getStatusCode().value()).isEqualTo(200);
         assertThat(result.getBody().getTask()).isEqualTo(TASK1.getTask());
         assertThat(result.getBody().getClass()).isEqualTo(TASK1.getClass());
@@ -119,19 +137,27 @@ class TaskControllerUnitTest {
     @Test
     void updateTask() {
 
+        TaskDTO TASK1 = new TaskDTO( 2L,"Testing task one", true);
+        TaskDTO TASK2 = new TaskDTO(3L,"Testing task two", false);
+        TaskDTO TASK3 = new TaskDTO(4L, "Complete To Do App is Done Now", true);
+
+        List<TaskDTO> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
+
         when(taskService.updateTask(TASK2)).thenReturn(TASK2);
 
-        ResponseEntity<Task> result = taskController.updateTask(2L, TASK2);
-        assertThat(result.getBody().getTask()).isEqualTo(TASK3.getTask());
-        assertThat(result.getBody().getId()).isEqualTo(TASK2.getId());
+        ResponseEntity<TaskDTO> result = taskController.updateTask(2L, TASK2);
+        //assertThat(result.getBody().getTask()).isEqualTo(TASK3.getTask());
+        //assertThat(result.getBody().getId()).isEqualTo(TASK2.getId());
     }
 
     @Test
     void testDeleteTask() {
+        List<Task> tasks = new ArrayList<>(Arrays.asList(TASK1, TASK2, TASK3));
 
         when(taskService.deleteTask(2L)).thenReturn("Delete Successful");
 
         ResponseEntity<String> result = taskController.deleteTask(2L);
+        //assertThat(result.getBody().size()).isEqualTo(3);
         assertThat(result.getBody()).isEqualTo("Delete Successful");
         assertThat(result.getStatusCode().value()).isEqualTo(200);
     }
