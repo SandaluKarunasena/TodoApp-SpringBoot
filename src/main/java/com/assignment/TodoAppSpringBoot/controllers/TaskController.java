@@ -1,5 +1,6 @@
 package com.assignment.TodoAppSpringBoot.controllers;
 
+import com.assignment.TodoAppSpringBoot.dto.TaskDTO;
 import com.assignment.TodoAppSpringBoot.models.Task;
 import com.assignment.TodoAppSpringBoot.services.Impl.TaskServiceImpl;
 import org.modelmapper.ModelMapper;
@@ -42,12 +43,12 @@ public class TaskController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
+    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO task) {
         return ResponseEntity.ok(taskService.createNewTask(task));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task) {
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO task) {
         task.setId(id);
         return ResponseEntity.ok(taskService.updateTask(task));
     }
