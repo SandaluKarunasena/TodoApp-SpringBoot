@@ -32,7 +32,7 @@ public class TaskControllerIntegrationTest {
                 .statusCode(200)
                 .body("size()", is(greaterThanOrEqualTo(0)))
                 .body("id", everyItem(instanceOf(Integer.class)))
-                .body("task[0]", equalTo("Write Unit tests with JUnit"))
+                .body("task[0]", equalTo("Refactor the code according to the existing architecture"))
                 .body("id", notNullValue())
                 .body("completed", everyItem(instanceOf(boolean.class)));
     }
@@ -49,7 +49,7 @@ public class TaskControllerIntegrationTest {
                 .then()
                 .statusCode(200)
                 .body("id", equalTo(targetId))
-                .body("task", equalTo("Write Integration tests With REST Assured"));
+                .body("task", equalTo("New Integration Testing Task"));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class TaskControllerIntegrationTest {
 
     @Test
     public void testDeleteTask() {
-        Long existingTaskId = 40L; //Existing Id to pass the test
+        Long existingTaskId = 1L; //Existing Id to pass the test
 
         // Perform the HTTP DELETE request
         given()
